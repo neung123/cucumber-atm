@@ -7,20 +7,25 @@ public class Customer {
    private int customerNumber;
    private int pin;
    private BankAccount account;
+   private final static String normalType = "Normal";
 
    /**
       Constructs a customer with a given number and PIN.
       @param aNumber the customer number
       @param aPin the personal identification number
    */
-   public Customer(int aNumber, int aPin, double currentBalance) {
+   public Customer(int aNumber, int aPin, double currentBalance, String accountType) {
       customerNumber = aNumber;
       pin = aPin;
-      account = new BankAccount(currentBalance);
+      account = new BankAccount(currentBalance, accountType);
    }
 
    public Customer(int aNumber, int aPin) {
-      this(aNumber, aPin, 0);
+      this(aNumber, aPin, 0, normalType);
+   }
+
+   public Customer(int aNumber, int aPin, double currentBalance) {
+      this(aNumber, aPin, currentBalance, normalType);
    }
 
    public int getCustomerNumber() {
