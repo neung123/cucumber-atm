@@ -106,4 +106,7 @@ public class ATM {
 		return state;
 	}
 
+    public BankAccount getCurrentAccount() {
+        return currentAccount;
+    }
 }

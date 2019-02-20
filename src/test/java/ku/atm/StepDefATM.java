@@ -12,6 +12,7 @@ public class StepDefATM {
     ATM atm;
     Bank bank;
     boolean validLogin;
+    private final static String normalType = "Normal";
 
     @Before
     public void init() {
@@ -28,6 +29,12 @@ public class StepDefATM {
     public void a_customer_with_id_and_pin_with_balance_exists(int id, int pin, double balance) {
         bank.addCustomer(new Customer(id, pin, balance));
     }
+
+    @Given("a customer with id (\\d+) and pin (\\d+) with balance (.*) in (.*) account")
+    public void a_customer_with_id_and_pin_with_balance_exists(int id, int pin, double balance, String type) {
+        bank.addCustomer(new Customer(id, pin, balance, type));
+    }
+
 
     @When("I login to ATM with id (\\d+) and pin (\\d+)")
     public void i_login_to_ATM_with_id_and_pin(int id, int pin) {
@@ -51,8 +58,11 @@ public class StepDefATM {
 
     @When("I overdraw (.*) from ATM")
     public void i_withdraw_from_atm_more_than_balance(double amount) throws NotEnoughBalanceException {
-        assertThrows(NotEnoughBalanceException.class,
-                () -> atm.withdraw(amount));
+        if(atm.getCurrentAccount().getType().equals(normalType)){
+            assertThrows(NotEnoughBalanceException.class,
+                    () -> atm.withdraw(amount));
+        }
+        else atm.withdraw(amount);
     }
     @Then("my account balance is (.*)")
     public void my_account_balance_is(double balance) {
